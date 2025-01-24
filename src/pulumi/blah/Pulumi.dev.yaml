@@ -1,0 +1,4 @@
+config:
+  gcp:project: indycomp0t1
+  gcp:region: us-east1
+  gcp:zone: us-east1-a
