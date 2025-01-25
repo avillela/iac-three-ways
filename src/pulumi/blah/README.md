@@ -9,7 +9,9 @@ gcloud config set project <your_project_name>
 gcloud auth application-default login
 ```
 
-Make sure that the [Kubernetes Engine API is enabled](https://console.cloud.google.com/apis/api/container.googleapis.com) for your project.
+**NOTES:**
+* Make sure that the [Kubernetes Engine API is enabled](https://console.cloud.google.com/apis/api/container.googleapis.com) for your project.
+* Make sure that `gke-gcloud-auth-plugin` is enabled. To enable it, run `  gcloud components install gke-gcloud-auth-plugin`
 
 2- Set up Python
 

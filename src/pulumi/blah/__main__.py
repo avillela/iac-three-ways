@@ -66,39 +66,43 @@ node_pool = NodePool(
 
 # Manufacture a GKE-style Kubeconfig. Note that this is slightly "different" because of the way GKE requires
 # gcloud to be in the picture for cluster authentication (rather than using the client cert/key directly).
-# Export the Cluster name
-export("cluster_name", k8s_cluster.name)
-
-# Manufacture a GKE-style kubeconfig
-kubeconfig = Output.all(k8s_cluster.name, k8s_cluster.endpoint, k8s_cluster.master_auth).apply(
-    lambda args: f"""
-    apiVersion: v1
-    clusters:
-    - cluster:
-        certificate-authority-data: {k8s_cluster.master_auth.cluster_ca_certificate}
-        server: https://{args[1]}
-      name: {args[0]}
-    contexts:
-    - context:
-        cluster: {args[0]}
-        user: {args[0]}
-      name: {args[0]}
-    current-context: {args[0]}
-    kind: Config
-    preferences: {{}}
-    users:
-    - name: {args[0]}
-      user:
-        exec:
-          apiVersion: client.authentication.k8s.io/v1beta1
-          command: gke-gcloud-auth-plugin
-          installHint: Install gke-gcloud-auth-plugin for use with kubectl by following
-            https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
-          provideClusterInfo: true
-    """
+k8s_info = Output.all(k8s_cluster.name, k8s_cluster.endpoint, k8s_cluster.master_auth)
+k8s_config = k8s_info.apply(
+    lambda info: """apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: {0}
+    server: https://{1}
+  name: {2}
+contexts:
+- context:
+    cluster: {2}
+    user: {2}
+  name: {2}
+current-context: {2}
+kind: Config
+preferences: {{}}
+users:
+- name: {2}
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1beta1
+      command: gke-gcloud-auth-plugin
+      installHint: Install gke-gcloud-auth-plugin for use with kubectl by following
+        https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
+      provideClusterInfo: true
+""".format(
+        info[2]["cluster_ca_certificate"],
+        info[1],
+        "{0}_{1}_{2}".format(project, zone, info[0]),
+    )
 )
 
-export("kubeconfig", kubeconfig)
+
+# Make a Kubernetes provider instance that uses our cluster from above.
+k8s_provider = Provider("gke_k8s", kubeconfig=k8s_config)
+
+export("kubeconfig", k8s_config)
 
 # Write kubeconfig to file
 def write_kubeconfig(content):
@@ -109,7 +113,7 @@ def write_kubeconfig(content):
     with open(filename, "w") as file:
         file.write(content)
         
-kubeconfig.apply(lambda content: write_kubeconfig(content))
+k8s_config.apply(lambda content: write_kubeconfig(content))
 
 # Create a Kubernetes provider instance that uses our cluster from above
 # from pulumi_kubernetes import Provider
@@ -137,6 +141,6 @@ kubeconfig.apply(lambda content: write_kubeconfig(content))
 # )
 
 # Finally, export the kubeconfig so that the client can easily access the cluster.
-export("kubeconfig", kubeconfig)
+# export("kubeconfig", kubeconfig)
 # Export the k8s ingress IP to access the canary deployment
 # export("ingress_ip", Output.all(ingress.status["load_balancer"]["ingress"][0]["ip"]))
