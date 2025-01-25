@@ -1,6 +1,17 @@
 # Set up Pulumi for Python
 
-1- Set up Python
+1- gCloud authentication
+
+Log into GCP
+
+```bash
+gcloud config set project <your_project_name>
+gcloud auth application-default login
+```
+
+Make sure that the [Kubernetes Engine API is enabled](https://console.cloud.google.com/apis/api/container.googleapis.com) for your project.
+
+2- Set up Python
 
 ```bash
 # Set up virtualenv
@@ -13,7 +24,7 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-2- Initialize Pulumi
+3- Initialize Pulumi
 
 This example assumes that you're using app.pulumi.com to store your stack. As a pre-requisite, you'll get set up [here](https://app.pulumi.com/). The service is free for personal use.
 
@@ -34,7 +45,7 @@ pulumi stack rm <stackname>
 pulumi stack ls
 ```
 
-3- Configure GCP project
+4- Configure GCP project in Pulumi
 
 ```bash
 pulumi config set gcp:project <your_project_name>
@@ -47,4 +58,7 @@ Find compute zones and regions
 ```bash
 gcloud compute zones list
 ```
+
+
+5- Provision infrastructure
 

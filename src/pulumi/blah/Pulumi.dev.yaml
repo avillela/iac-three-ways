@@ -1,4 +1,11 @@
 config:
   gcp:project: indycomp0t1
   gcp:region: us-east1
-  gcp:zone: us-east1-a
+  gcp:zone: us-east1-b
+
+  iac-three-ways:cluster_name: pulumi-gke
+  iac-three-ways:disk_size_gb: "30"
+  iac-three-ways:disk_type: pd-standard
+  iac-three-ways:image_type: cos_containerd
+  iac-three-ways:node_count: "1"
+  iac-three-ways:node_machine_type: n1-standard-4
