@@ -1,11 +1,7 @@
 #!/bin/bash
 
-# # Set the gcloud project name
-# gcloud config set project ${GCP_PROJECT_NAME}
-
-# # Activate the gcloud service account
-# gcloud auth activate-service-account ${SERVICE_ACCOUNT_NAME}@${GCP_PROJECT_NAME}.iam.gserviceaccount.com --key-file=${SERVICE_ACCOUNT_PRIVATE_KEY_JSON}
-
+# Intall gcloud CLI. I am installing it here instead of via devcontainer feature
+# because I can't install gke-gcloud-auth-plugin if gcloud is installed that way.
 sudo apt-get update && sudo apt-get install -y apt-transport-https gnupg curl lsb-release
 export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)" && \
   echo "cloud SDK repo: $CLOUD_SDK_REPO" && \
