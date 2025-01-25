@@ -7,8 +7,16 @@ from pulumi import Config, export, get_project, get_stack, Output, ResourceOptio
 from pulumi_gcp.config import project, zone, region
 from pulumi_gcp.container import Cluster, get_engine_versions, NodePool
 from pulumi_kubernetes import Provider
-from pulumi_kubernetes.apps.v1 import Deployment
-from pulumi_kubernetes.core.v1 import Service
+from pulumi_kubernetes.apps.v1 import Deployment, DeploymentSpecArgs
+from pulumi_kubernetes.core.v1 import (
+    ContainerArgs,
+    PodSpecArgs,
+    PodTemplateSpecArgs,
+    Service,
+    ServicePortArgs,
+    ServiceSpecArgs,
+)
+from pulumi_kubernetes.meta.v1 import LabelSelectorArgs, ObjectMetaArgs
 from pulumi_random import RandomPassword
 
 # Read in some configurable settings for our cluster:
@@ -31,6 +39,7 @@ print(f"Project: {project} | Region: {region} | Zone: {zone}")
 # Now, actually create the GKE cluster.
 k8s_cluster = Cluster(
     resource_name=CLUSTER_NAME,
+    deletion_protection=False,
     initial_node_count=1,
     location=zone,
     min_master_version=ENGINE_VERSION,
@@ -115,32 +124,38 @@ def write_kubeconfig(content):
         
 k8s_config.apply(lambda content: write_kubeconfig(content))
 
-# Create a Kubernetes provider instance that uses our cluster from above
-# from pulumi_kubernetes import Provider
-# cluster_provider = Provider("helloworld-provider", kubeconfig=kubeconfig)
 
 # Create a canary deployment to test that this cluster works.
-# labels = {"app": "canary-{0}-{1}".format(get_project(), get_stack())}
-# canary = Deployment(
-#     "canary",
-#     spec={
-#         "selector": {"matchLabels": labels},
-#         "replicas": 1,
-#         "template": {
-#             "metadata": {"labels": labels},
-#             "spec": {"containers": [{"name": "nginx", "image": "nginx"}]},
-#         },
-#     },
-#     __opts__=ResourceOptions(provider=k8s_provider),
-# )
+labels = {"app": "canary-{0}-{1}".format(get_project(), get_stack())}
+canary = Deployment(
+    "canary",
+    spec=DeploymentSpecArgs(
+        selector=LabelSelectorArgs(match_labels=labels),
+        replicas=1,
+        template=PodTemplateSpecArgs(
+            metadata=ObjectMetaArgs(labels=labels),
+            spec=PodSpecArgs(containers=[ContainerArgs(name="nginx", image="nginx")]),
+        ),
+    ),
+    opts=ResourceOptions(provider=k8s_provider),
+)
 
-# ingress = Service(
-#     "ingress",
-#     spec={"type": "LoadBalancer", "selector": labels, "ports": [{"port": 80}]},
-#     __opts__=ResourceOptions(provider=k8s_provider),
-# )
+
+ingress = Service(
+    "ingress",
+    spec=ServiceSpecArgs(
+        type="LoadBalancer",
+        selector=labels,
+        ports=[ServicePortArgs(port=80)],
+    ),
+    opts=ResourceOptions(provider=k8s_provider),
+)
+
 
 # Finally, export the kubeconfig so that the client can easily access the cluster.
-# export("kubeconfig", kubeconfig)
+export("kubeconfig", k8s_config)
 # Export the k8s ingress IP to access the canary deployment
-# export("ingress_ip", Output.all(ingress.status["load_balancer"]["ingress"][0]["ip"]))
+export(
+    "ingress_ip",
+    ingress.status.apply(lambda status: status.load_balancer.ingress[0].ip),
+)

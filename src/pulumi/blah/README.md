@@ -9,9 +9,14 @@ gcloud config set project <your_project_name>
 gcloud auth application-default login
 ```
 
-**NOTES:**
-* Make sure that the [Kubernetes Engine API is enabled](https://console.cloud.google.com/apis/api/container.googleapis.com) for your project.
-* Make sure that `gke-gcloud-auth-plugin` is enabled. To enable it, run `  gcloud components install gke-gcloud-auth-plugin`
+Make sure that the [Kubernetes Engine API is enabled](https://console.cloud.google.com/apis/api/container.googleapis.com) for your project.
+
+Make sure that `gke-gcloud-auth-plugin` is enabled. To enable it, run:
+
+```bash
+gcloud components install gke-gcloud-auth-plugin
+gcloud auth login
+```
 
 2- Set up Python
 
@@ -41,7 +46,7 @@ Additional commands
 pulumi stack select <stackname>
 
 # Use delete stack
-pulumi stack rm <stackname>
+pulumi stack rm <stackname> -f
 
 # List stacks
 pulumi stack ls

@@ -3,7 +3,7 @@
     "image": "mcr.microsoft.com/devcontainers/python:dev-3.11-bullseye",
     "features": {
   
-      "ghcr.io/dhoeric/features/google-cloud-cli:1": {},
+      // "ghcr.io/dhoeric/features/google-cloud-cli:1": {},
       "ghcr.io/devcontainers-extra/features/kubectl-asdf:2": {},
       "ghcr.io/dhoeric/features/k9s:1": {},
       "ghcr.io/flexwie/devcontainer-features/pulumi:1": {},
@@ -11,7 +11,7 @@
     //   "ghcr.io/devcontainers-extra/features/terraform-asdf:2": {}
     },
     "overrideFeatureInstallOrder": [
-        "ghcr.io/dhoeric/features/google-cloud-cli",
+        // "ghcr.io/dhoeric/features/google-cloud-cli",
         "ghcr.io/devcontainers-extra/features/kubectl-asdf",
         "ghcr.io/dhoeric/features/k9s",
         "ghcr.io/flexwie/devcontainer-features/pulumi",
@@ -28,5 +28,5 @@
     },
     "containerUser": "vscode",
     // "postCreateCommand": ".devcontainer/post-create.sh",
-    // "postStartCommand": ".devcontainer/post-start.sh",
+    "postStartCommand": ".devcontainer/post-start.sh",
   }
