@@ -6,4 +6,5 @@ module "k8s_cluster_create" {
     region = var.region
     network = var.network
     subnet = var.subnet
+    gke_num_nodes = var.gke_num_nodes
 }
