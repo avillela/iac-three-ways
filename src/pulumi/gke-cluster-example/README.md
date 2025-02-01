@@ -1,4 +1,4 @@
-# Set up Pulumi for Python
+# Use Pulumi Python SDK to Create a Kubernetes Cluster in Google Cloud
 
 1- gCloud authentication
 
@@ -14,13 +14,15 @@ Make sure that the [Kubernetes Engine API is enabled](https://console.cloud.goog
 Make sure that `gke-gcloud-auth-plugin` is enabled. To enable it, run:
 
 ```bash
-gcloud components install gke-gcloud-auth-plugin
+sudo apt-get install google-cloud-cli-gke-gcloud-auth-plugin
 gcloud auth login
 ```
 
-2- Set up Python
+2- Set up Python with Pulumi
 
 ```bash
+cd src/pulumi/gke-cluster-example
+
 # Set up virtualenv
 pip install virtualenv
 virtualenv venv

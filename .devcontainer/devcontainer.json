@@ -6,14 +6,14 @@
       "ghcr.io/devcontainers-extra/features/kubectl-asdf:2": {},
       "ghcr.io/dhoeric/features/k9s:1": {},
       "ghcr.io/flexwie/devcontainer-features/pulumi:1": {},
-      "ghcr.io/devcontainers/features/terraform:1": {},
+      // "ghcr.io/devcontainers/features/terraform:1": {},
     //   "ghcr.io/devcontainers-extra/features/terraform-asdf:2": {}
     },
     "overrideFeatureInstallOrder": [
         "ghcr.io/devcontainers-extra/features/kubectl-asdf",
         "ghcr.io/dhoeric/features/k9s",
         "ghcr.io/flexwie/devcontainer-features/pulumi",
-        "ghcr.io/devcontainers/features/terraform:1",
+        // "ghcr.io/devcontainers/features/terraform:1",
         // "ghcr.io/devcontainers-extra/features/terraform-asdf"
     ],
     "hostRequirements": {

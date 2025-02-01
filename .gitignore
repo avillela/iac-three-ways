@@ -4,3 +4,9 @@
 
 *.pyc
 venv/
+__pycache__
+
+*.tfvars
+.terraform
+*.lock*
+*.tfstate*

@@ -1,0 +1,7 @@
+# GCP Stuff
+project_id = "<your_gcp_project>"
+cluster_name = "<your_gke_cluster_name>"
+region     = "us-central1"
+network    = "default"
+subnet     = "default"
+gke_num_nodes = 1
