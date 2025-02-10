@@ -38,6 +38,7 @@ pip install -r requirements.txt
 This example assumes that you're using app.pulumi.com to store your stack. As a pre-requisite, you'll get set up [here](https://app.pulumi.com/). The service is free for personal use.
 
 ```bash
+# One-time only
 pulumi stack init dev
 ```
 
@@ -56,6 +57,8 @@ pulumi stack ls
 
 4- Configure GCP project in Pulumi
 
+This configuration is one-time only.
+
 ```bash
 pulumi config set gcp:project <your_project_name>
 pulumi config set gcp:region <region>
@@ -70,4 +73,21 @@ gcloud compute zones list
 
 
 5- Provision infrastructure
+
+```bash
+# When starting a new session
+pulumi stack select <stackname>
+
+# Create cluster
+pulumi up
+
+# Preview changes
+pulumi preview
+
+# Destroy cluster
+pulumi destroy
+
+# Destroy the stack
+pulumi stack rm
+```
 
