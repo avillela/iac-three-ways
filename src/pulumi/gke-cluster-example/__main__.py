@@ -40,7 +40,7 @@ print(f"Project: {project} | Region: {region} | Zone: {zone}")
 k8s_cluster = Cluster(
     resource_name=CLUSTER_NAME,
     deletion_protection=False,
-    initial_node_count=1,
+    initial_node_count=NODE_COUNT,
     location=zone,
     min_master_version=ENGINE_VERSION,
     node_version=ENGINE_VERSION,
@@ -61,7 +61,7 @@ k8s_cluster = Cluster(
 node_pool = NodePool(
     resource_name=NODE_POOL_NAME,
     cluster=k8s_cluster.name,
-    initial_node_count=1,
+    initial_node_count=NODE_COUNT,
     location=zone,
     node_config={
         "machine_type": NODE_MACHINE_TYPE,

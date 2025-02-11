@@ -1,0 +1,13 @@
+# GCP Stuff
+project_id = "<your_gcp_project>"
+region     = "<your_gcp_region>"
+zone       = "us-east1-b"
+network    = "default"
+subnet     = "default"
+
+cluster_name = "<your_gke_cluster_name>"
+disk_size_gb = "<your_disk_size>"
+disk_type = "<your_disk_type>"
+image_type = "<your_image_type>"
+node_count = "<your_node_count>"
+node_machine_type = "<your_machine_type>"
