@@ -41,3 +41,8 @@ variable "node_count" {
 variable "node_machine_type" {
   description = "node machine type"
 }
+
+variable "canary_deployment_namespace" {
+  default = "canary-example"
+  description = "Namespace of Canary deployment"
+}

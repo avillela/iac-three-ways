@@ -20,6 +20,7 @@ export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)" && \
   sudo curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add - && \
   sudo apt-get update -y && sudo apt-get install google-cloud-sdk -y
 
+sudo apt-get install google-cloud-cli-gke-gcloud-auth-plugin
 
 ### -----------------
 ### Install OpenTofu

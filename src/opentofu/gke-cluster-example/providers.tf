@@ -36,9 +36,8 @@ data "google_client_config" "default" {
 data "google_container_cluster" "primary" {
   depends_on = [module.k8s_cluster_create]
   name     = var.cluster_name
-  location = var.region
+  location = var.zone
 }
-
 
 provider "kubernetes" {
   host  = "https://${data.google_container_cluster.primary.endpoint}"

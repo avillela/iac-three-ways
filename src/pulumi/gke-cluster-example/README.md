@@ -44,6 +44,8 @@ pulumi stack init dev
 
 Additional commands
 
+Fully-qualified stackname: https://app.pulumi.com/<user_id>/<project_name>/<stack_name>
+
 ```bash
 # Select stack
 pulumi stack select <stackname>
@@ -78,13 +80,13 @@ gcloud compute zones list
 # When starting a new session
 pulumi stack select <stackname>
 
-# Create cluster
-pulumi up
+# Run plan
+pulumi up -y
 
 # Preview changes
 pulumi preview
 
-# Destroy cluster
+# Destroy infrastructure
 pulumi destroy
 
 # Destroy the stack

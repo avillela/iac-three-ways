@@ -31,9 +31,15 @@ tofu plan
 
 # Execute plan
 tofu apply -auto-approve
+
+# Destroy resources
+tofu destroy
 ```
 
 # References
 
 * https://search.opentofu.org/module/jwduarteg/gke/google/latest/example/gke-basic-helm
 * 
+
+
+Interesting article: https://github.com/opentofu/opentofu/issues/2464
