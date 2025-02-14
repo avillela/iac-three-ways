@@ -11,7 +11,8 @@ spec:
         cluster-name: test-cluster
     nodeCount: 2    
     nodeConfig:
-      machineType: e2-medium
+      - preemptible: true
+        machineType: e2-medium
         oauthScopes:
           - https://www.googleapis.com/auth/cloud-platform
         labels:
