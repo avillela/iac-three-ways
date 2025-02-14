@@ -1,0 +1,21 @@
+apiVersion: container.gcp.upbound.io/v1beta1
+kind: NodePool
+metadata:
+  annotations:
+    meta.upbound.io/example-id: container/v1beta1/nodepool
+  labels:
+    cluster-name: ana-cluster
+  name: ana-cluster-nodepool
+spec:
+  forProvider:
+    clusterSelector:
+      matchLabels:
+        cluster-name: ana-cluster
+    nodeCount: 2
+    nodeConfig:
+      - preemptible: true
+        machineType: e2-medium
+        oauthScopes:
+          - https://www.googleapis.com/auth/cloud-platform
+        labels:
+          node-pool-name: ana-cluster-nodepool
