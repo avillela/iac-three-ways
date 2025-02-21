@@ -3,9 +3,10 @@
 
 import os
 from pathlib import Path
+
 from pulumi import Config, export, get_project, get_stack, Output, ResourceOptions
-from pulumi_gcp.config import project, zone, region
-from pulumi_gcp.container import Cluster, get_engine_versions, NodePool
+from pulumi_gcp.config import project, zone
+from pulumi_gcp.container import Cluster, get_engine_versions, NodePool, ClusterNodeConfigArgs
 from pulumi_kubernetes import Provider
 from pulumi_kubernetes.apps.v1 import Deployment, DeploymentSpecArgs
 from pulumi_kubernetes.core.v1 import (
@@ -22,40 +23,40 @@ from pulumi_random import RandomPassword
 # Read in some configurable settings for our cluster:
 config = Config(None)
 
-NODE_COUNT = config.get("node_count")
+NODE_COUNT = config.get_int("node_count")
 NODE_MACHINE_TYPE = config.get("node_machine_type")
 IMAGE_TYPE = config.get("image_type")
 DISK_TYPE = config.get("disk_type")
 DISK_SIZE_GB = config.get("disk_size_gb")
 
-# master version of GKE engine
+# Note: if you get an error re: unsupported GKE version, try specifying a different zone
 ENGINE_VERSION = get_engine_versions().latest_master_version
 CLUSTER_NAME = config.get("cluster_name")
 NODE_POOL_NAME = f"{CLUSTER_NAME}-node-pool"
 
-print(f"Engine version: {ENGINE_VERSION}")
-print(f"Project: {project} | Region: {region} | Zone: {zone}")
 
 # Now, actually create the GKE cluster.
 k8s_cluster = Cluster(
     resource_name=CLUSTER_NAME,
     deletion_protection=False,
     initial_node_count=NODE_COUNT,
+    # node_version=ENGINE_VERSION,
+    remove_default_node_pool=True, # If remove_default_node_pool is true, then can't specify node_version
     location=zone,
     min_master_version=ENGINE_VERSION,
-    node_version=ENGINE_VERSION,
-    node_config={
-        "machine_type": NODE_MACHINE_TYPE,
-        "imageType": IMAGE_TYPE,
-        "diskType": DISK_TYPE,
-        "disk_size_gb": DISK_SIZE_GB,
-        "oauth_scopes": [
+    node_config=ClusterNodeConfigArgs(
+        machine_type=NODE_MACHINE_TYPE,
+        image_type=IMAGE_TYPE,
+        disk_type=DISK_TYPE,
+        disk_size_gb=DISK_SIZE_GB,
+        oauth_scopes=[
             "https://www.googleapis.com/auth/compute",
             "https://www.googleapis.com/auth/devstorage.read_only",
             "https://www.googleapis.com/auth/logging.write",
             "https://www.googleapis.com/auth/monitoring",
+            "https://www.googleapis.com/auth/cloud-platform",
         ],
-    }
+    ),
 )
 
 node_pool = NodePool(
@@ -63,15 +64,16 @@ node_pool = NodePool(
     cluster=k8s_cluster.name,
     initial_node_count=NODE_COUNT,
     location=zone,
-    node_config={
-        "machine_type": NODE_MACHINE_TYPE,
-        "imageType": IMAGE_TYPE,
-        "diskType": DISK_TYPE,
-        "disk_size_gb": DISK_SIZE_GB,
-        "oauth_scopes": [
+    node_config=ClusterNodeConfigArgs(
+        machine_type=NODE_MACHINE_TYPE,
+        image_type=IMAGE_TYPE,
+        disk_type=DISK_TYPE,
+        disk_size_gb=DISK_SIZE_GB,
+        oauth_scopes=[
             "https://www.googleapis.com/auth/cloud-platform",
         ],
-    })
+    ),
+)
 
 # Manufacture a GKE-style Kubeconfig. Note that this is slightly "different" because of the way GKE requires
 # gcloud to be in the picture for cluster authentication (rather than using the client cert/key directly).
@@ -107,10 +109,6 @@ users:
     )
 )
 
-
-# Make a Kubernetes provider instance that uses our cluster from above.
-k8s_provider = Provider("gke_k8s", kubeconfig=k8s_config)
-
 export("kubeconfig", k8s_config)
 
 # Write kubeconfig to file
@@ -124,6 +122,8 @@ def write_kubeconfig(content):
         
 k8s_config.apply(lambda content: write_kubeconfig(content))
 
+# Make a Kubernetes provider instance that uses our cluster from above.
+k8s_provider = Provider("gke_k8s", kubeconfig=k8s_config)
 
 # Create a canary deployment to test that this cluster works.
 labels = {"app": "canary-{0}-{1}".format(get_project(), get_stack())}
@@ -140,7 +140,6 @@ canary = Deployment(
     opts=ResourceOptions(provider=k8s_provider),
 )
 
-
 ingress = Service(
     "ingress",
     spec=ServiceSpecArgs(
@@ -150,7 +149,6 @@ ingress = Service(
     ),
     opts=ResourceOptions(provider=k8s_provider),
 )
-
 
 # Finally, export the kubeconfig so that the client can easily access the cluster.
 export("kubeconfig", k8s_config)

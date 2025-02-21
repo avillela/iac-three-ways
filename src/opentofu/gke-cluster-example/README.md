@@ -1,24 +1,18 @@
 # Use OpenTofu to Create a Kubernetes Cluster in Google Cloud
 
-1- gCloud authentication
+## Setup
+
+### 1- gCloud authentication
 
 Log into GCP
 
 ```bash
+gcloud auth login
 gcloud config set project <your_project_name>
 gcloud auth application-default login
 ```
 
-Make sure that the [Kubernetes Engine API is enabled](https://console.cloud.google.com/apis/api/container.googleapis.com) for your project.
-
-Make sure that `gke-gcloud-auth-plugin` is enabled. To enable it, run:
-
-```bash
-sudo apt-get install google-cloud-cli-gke-gcloud-auth-plugin
-gcloud auth login
-```
-
-2- Set up OpenTofu
+### 2- Set up OpenTofu
 
 ```bash
 cd src/opentofu/gke-cluster-example
@@ -31,15 +25,14 @@ tofu plan
 
 # Execute plan
 tofu apply -auto-approve
+```
 
-# Destroy resources
+To destroy your infrastructure, run:
+
+```bash
 tofu destroy
 ```
 
-# References
+## References
 
-* https://search.opentofu.org/module/jwduarteg/gke/google/latest/example/gke-basic-helm
-* 
-
-
-Interesting article: https://github.com/opentofu/opentofu/issues/2464
+TBD

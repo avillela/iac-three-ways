@@ -1,7 +1,7 @@
 config:
   gcp:project: indycomp0t1
-  gcp:region: us-east1
-  gcp:zone: us-east1-b
+  gcp:region: northamerica-northeast1
+  gcp:zone: northamerica-northeast1-c
 
   iac-three-ways:cluster_name: pulumi-gke
   iac-three-ways:disk_size_gb: "30"

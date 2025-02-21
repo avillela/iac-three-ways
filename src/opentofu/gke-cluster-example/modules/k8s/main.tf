@@ -34,7 +34,6 @@ resource "google_container_node_pool" "primary_nodes" {
       env = var.project_id
     }
 
-    # preemptible  = true
     machine_type = var.node_machine_type
     image_type = var.image_type
     disk_type    = var.disk_type
