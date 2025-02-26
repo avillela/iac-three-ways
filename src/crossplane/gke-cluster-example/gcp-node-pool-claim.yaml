@@ -1,0 +1,19 @@
+apiVersion: container.gcp.upbound.io/v1beta1
+kind: NodePool
+metadata:
+  labels:
+    cluster-name: test-cluster
+  name: test-cluster-nodepool
+spec:
+  forProvider:
+    clusterSelector:
+      matchLabels:
+        cluster-name: test-cluster
+    nodeCount: 2    
+    nodeConfig:
+      - preemptible: true
+        machineType: e2-medium
+        oauthScopes:
+          - https://www.googleapis.com/auth/cloud-platform
+        labels:
+          node-pool-name: test-cluster-nodepool

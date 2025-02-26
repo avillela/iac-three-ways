@@ -1,0 +1,12 @@
+apiVersion: container.gcp.upbound.io/v1beta1
+kind: Cluster
+metadata:
+  labels:
+    cluster-name: test-cluster
+  name: test-cluster
+spec:
+  forProvider:
+    removeDefaultNodePool: true
+    initialNodeCount: 1
+    location: us-central1-a
+    deletionProtection: true
