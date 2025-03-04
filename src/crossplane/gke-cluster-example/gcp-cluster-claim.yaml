@@ -9,4 +9,4 @@ spec:
     removeDefaultNodePool: true
     initialNodeCount: 1
     location: us-central1-a
-    deletionProtection: true
+    deletionProtection: Delete
