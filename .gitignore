@@ -10,3 +10,4 @@ __pycache__
 .terraform
 *.lock*
 *.tfstate*
+gcp-credentials.json
