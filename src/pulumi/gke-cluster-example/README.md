@@ -24,6 +24,9 @@ This example assumes that your stack is located in [app.pulumi.com](https://app.
 
 Create a new Pulumi project under your account. This is done one-time only. This will overwrite everything in this directiory, which is fine, because we haven't made any changes to the code.
 
+If getting an account with pulumi.com isn't your jam, you can alternatively manage Pulumi state yourself, either through local storage or cloud provider storage. More info [here](https://www.pulumi.com/docs/pulumi-cloud/faq/#:~:text=If%20you%20use%20your%20own,in%20to%20an%20alternative%20backend.).
+
+
 ```bash
 pulumi new https://github.com/avillela/iac-three-ways \
     -n iac-three-ways \
