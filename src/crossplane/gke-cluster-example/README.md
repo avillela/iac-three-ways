@@ -40,26 +40,7 @@ kubectl apply -f gcp-container-provider.yaml
 ```bash
 kubectl get providers
 ```
-### Create Service Account
-```bash
-gcloud iam service-accounts create ana-crossplane-sa
-```
-
-### Apply Roles to Service Account
-* TODO FIX PERMISSIONS NEEDED
-```bash
-gcloud projects add-iam-policy-binding <project-id> \
---member=serviceAccount:crossplane-sa@<project-id>.iam.gserviceaccount.com \
---role=roles/container.admin \
---role=roles/container.clusterAdmin \
---role=roles/container.clusterViewer \
---role=roles/container.developer \
---role=roles/container.viewer \
---role=roles/compute.admin \
---role=roles/compute.viewer \
---role=roles/iam.serviceAccountUser \
---role=roles/storage.admin 
-```
+### Create Service Account on Google Cloud
 
 ### Download JSON for Service Account
 ```bash
